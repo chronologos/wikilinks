@@ -114,8 +114,8 @@ def main():
         # group 0: 20200314062439_Simple Zettel
         # group 1: 20200314062439
         # group 2: Simple Zettel
-        matches = uid_title_regex.finditer(line)
-        for match in matches:
+        match = uid_title_regex.search(line)
+        while match:
             link_text = match.group(1)
             if match.lastindex >= 2 and match.group(2) != "":
                 link_text = match.group(2)
@@ -128,7 +128,8 @@ def main():
                 link = files[0]
                 link = urllib.parse.quote(link)
             full_link = "[\[\[{}\]\]]({})".format(link_text, link)
-            line = line[: match.start()] + full_link + line[match.end() + 1 :]
+            line = line[:match.start()] + full_link + line[match.end():]
+            match = uid_title_regex.search(line)
         print(line)
 
 
